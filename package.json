@@ -4,30 +4,23 @@
   "description": "Magizh Trader - Weekly & Monthly MNQ Futures Profit Tracker",
   "main": "server/index.js",
   "scripts": {
-    "start":        "node server/index.js",
-    "dev":          "nodemon server/index.js",
+    "start":       "node server/index.js",
+    "dev":         "nodemon server/index.js",
 
-    "build":        "npm run build:clean && npm run build:data",
-    "build:clean":  "node -e \"const fs=require('fs');['dist'].forEach(d=>{fs.rmSync(d,{recursive:true,force:true});console.log('Cleaned',d);});\"",
-    "build:data":   "node -e \"const fs=require('fs');fs.mkdirSync('data',{recursive:true});console.log('data/ folder ready');\"",
+    "build":       "node scripts/run.js build",
+    "clean":       "node scripts/run.js clean",
+    "clean:db":    "node scripts/run.js clean:db",
+    "lint":        "node scripts/run.js lint",
+    "backup":      "node scripts/run.js backup",
+    "restore":     "node scripts/run.js restore",
+    "info":        "node scripts/run.js info",
 
-    "clean":        "node -e \"const fs=require('fs');['dist','data'].forEach(d=>{fs.rmSync(d,{recursive:true,force:true});console.log('Removed',d);});\"",
-    "clean:db":     "node -e \"const fs=require('fs');const p='data/tracker.db';if(fs.existsSync(p)){fs.unlinkSync(p);console.log('Database cleared');}else{console.log('No database found');}\"",
-
-    "lint":         "node --check server/index.js public/js/app.js && echo 'Syntax OK'",
-
-    "backup":       "node -e \"const fs=require('fs');const d=new Date().toISOString().slice(0,10);const src='data/tracker.db';if(fs.existsSync(src)){fs.mkdirSync('backups',{recursive:true});fs.copyFileSync(src,'backups/tracker_'+d+'.db');console.log('Backup saved: backups/tracker_'+d+'.db');}else{console.log('No database to backup.');}\"",
-
-    "restore":      "node -e \"const fs=require('fs');const files=fs.existsSync('backups')?fs.readdirSync('backups').filter(f=>f.endsWith('.db')).sort():[];if(!files.length){console.log('No backups found in backups/');}else{const latest='backups/'+files[files.length-1];fs.mkdirSync('data',{recursive:true});fs.copyFileSync(latest,'data/tracker.db');console.log('Restored from',latest);}\"",
-
-    "info":         "node -e \"const fs=require('fs');const pkg=require('./package.json');const db='data/tracker.db';const exists=fs.existsSync(db);const size=exists?fs.statSync(db).size:0;console.log('\\n  App     :',pkg.name,'v'+pkg.version);console.log('  Node    :',process.version);console.log('  DB      :',exists?db+' ('+size+' bytes)':'not created yet');console.log('  Port    :',process.env.PORT||3000);console.log();\"",
-
-    "pm2:start":    "pm2 start server/index.js --name magizh-tracker",
-    "pm2:stop":     "pm2 stop magizh-tracker",
-    "pm2:restart":  "pm2 restart magizh-tracker",
-    "pm2:status":   "pm2 status magizh-tracker",
-    "pm2:logs":     "pm2 logs magizh-tracker",
-    "pm2:save":     "pm2 save && pm2 startup"
+    "pm2:start":   "pm2 start server/index.js --name magizh-tracker",
+    "pm2:stop":    "pm2 stop magizh-tracker",
+    "pm2:restart": "pm2 restart magizh-tracker",
+    "pm2:status":  "pm2 status magizh-tracker",
+    "pm2:logs":    "pm2 logs magizh-tracker",
+    "pm2:save":    "pm2 save && pm2 startup"
   },
   "engines": {
     "node": ">=18.0.0"

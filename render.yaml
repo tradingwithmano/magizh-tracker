@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: magizh-trader-tracker
+    env: node
+    region: singapore          # closest to India — change to: oregon / ohio / frankfurt
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DB_PATH
+        value: /data/tracker.db   # persistent disk mount path
+
+    # Persistent disk — keeps your SQLite database across deploys and restarts
+    disk:
+      name: tracker-db
+      mountPath: /data
+      sizeGB: 1                  # 1 GB free on Render

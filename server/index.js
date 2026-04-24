@@ -8,9 +8,13 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 
 // ── DATABASE SETUP (sql.js — pure JS, no native build) ────────────────
-const DATA_DIR = path.join(__dirname, '..', 'data');
-const DB_PATH  = path.join(DATA_DIR, 'tracker.db');
-fs.mkdirSync(DATA_DIR, { recursive: true });
+// DB_PATH env var is set by Render to /data/tracker.db (persistent disk)
+// Locally it falls back to ./data/tracker.db
+const DB_PATH = process.env.DB_PATH
+  ? path.resolve(process.env.DB_PATH)
+  : path.join(__dirname, '..', 'data', 'tracker.db');
+
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
 let db;
 
